@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -63,9 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
   late VideoPlayerController _winningGameController;
   late VideoPlayerController _loosingGameController;
 
-  final _initVideoPauseTicks = 28;
-  final _showcaseVideoPauseTicks = 25;
-  final _timeFraction = 250;
+  final _initVideoPauseTicks = 140;
+  final _showcaseVideoPauseTicks = 124;
+  final _timeFraction = 50;
   final _winCount = 4;
   late Timer _introTimer;
   late Timer _showcaseTimer;
@@ -162,6 +164,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    late Color iconColor;
+    if (phase == 1) {
+      iconColor = const Color(0x8Aea6d52);
+    } else if (phase == 2) {
+      iconColor = Colors.white54;
+    } else {
+      iconColor = const Color(0x8Acf1445);
+    }
+
     return Scaffold(
       body: Stack(
         children: [
@@ -247,7 +258,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       )
                     ],
                   ),
-                ))
+                )),
+          Positioned(
+              top: 25,
+              right: 25,
+              child: IconButton(
+                  onPressed: () async {
+                    await SystemChannels.platform
+                        .invokeMethod<void>('SystemNavigator.pop', true);
+                  },
+                  icon: Icon(
+                    CupertinoIcons.clear,
+                    size: 32,
+                    color: iconColor,
+                  ))),
         ],
       ),
       // floatingActionButton: FloatingActionButton(
